@@ -21,7 +21,7 @@ module.exports = {
       },
       adjunct: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       city: {
         type: Sequelize.STRING,
