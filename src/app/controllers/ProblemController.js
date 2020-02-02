@@ -93,11 +93,21 @@ class ProblemController {
   async cancel(req, res) {
     const { deliveryId } = req.params;
 
+    const problemExists = await Problem.findOne({
+      where: { delivery_id: deliveryId },
+    });
+
+    if (!problemExists) {
+      return res
+        .status(400)
+        .json({ error: 'There is no problem with this delivery' });
+    }
+
     const delivery = await Delivery.findByPk(deliveryId);
 
     await delivery.update({ canceled_at: new Date() });
 
-    res.json(delivery);
+    return res.json(delivery);
   }
 }
 
