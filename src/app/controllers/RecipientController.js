@@ -79,7 +79,8 @@ class RecipientController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const recipient = await Recipient.findByPk(req.recipientId);
+    const { recipientId } = req.params;
+    const recipient = await Recipient.findByPk(recipientId);
 
     const {
       name,
@@ -105,7 +106,8 @@ class RecipientController {
   }
 
   async delete(req, res) {
-    const recipient = await Recipient.findByPk(req.recipientId);
+    const { recipientId } = req.params;
+    const recipient = await Recipient.findByPk(recipientId);
 
     const data = await recipient.delete(req.body);
 
