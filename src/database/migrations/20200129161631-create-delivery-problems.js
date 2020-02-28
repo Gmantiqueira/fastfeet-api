@@ -2,7 +2,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('delivery_problems', {
       delivery_id: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: { model: 'delivery', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',

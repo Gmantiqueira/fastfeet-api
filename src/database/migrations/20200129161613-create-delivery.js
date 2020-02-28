@@ -2,27 +2,27 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('delivery', {
       id: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
       },
       recipient_id: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: { model: 'recipient', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         allowNull: false,
       },
       deliveryman_id: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: { model: 'deliveryman', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
         allowNull: false,
       },
       signature_id: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: { model: 'files', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'SET NULL',
