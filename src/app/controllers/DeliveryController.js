@@ -90,9 +90,9 @@ class DeliveryController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const { deliverymanId } = req.params;
+    const { deliveryId } = req.params;
 
-    const deliveryman = await Deliveryman.findByPk(deliverymanId);
+    const delivery = await Delivery.findByPk(deliveryId);
 
     const {
       recipient_id,
@@ -102,7 +102,7 @@ class DeliveryController {
       canceled_at,
       start_date,
       end_date,
-    } = await deliveryman.update(req.body);
+    } = await delivery.update(req.body);
 
     return res.json({
       recipient_id,
@@ -118,9 +118,9 @@ class DeliveryController {
   async delete(req, res) {
     const { deliveryId } = req.params;
 
-    const data = await Delivery.delete({
+    const data = await Delivery.destroy({
       where: {
-        delivery_id: deliveryId,
+        id: deliveryId,
       },
     });
 
