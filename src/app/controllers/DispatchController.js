@@ -1,6 +1,6 @@
 import { getHours } from 'date-fns';
 
-import Delivery from '../models/Deliveryman';
+import Delivery from '../models/Delivery';
 import File from '../models/File';
 import Recipient from '../models/Recipient';
 
@@ -16,7 +16,7 @@ class OrderController {
         .json({ error: 'The withdrawal date must be between 8am and 6pm' });
     }
 
-    await delivery.update({ date_start: new Date() });
+    await delivery.update({ start_date: new Date() });
 
     return res.json(delivery);
   }
