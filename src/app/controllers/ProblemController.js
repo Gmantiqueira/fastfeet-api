@@ -54,7 +54,6 @@ class ProblemController {
                 'adjunct',
                 'city',
                 'state',
-                'country',
                 'zip_code',
               ],
             },

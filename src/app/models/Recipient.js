@@ -10,7 +10,6 @@ class Recipient extends Model {
         adjunct: Sequelize.STRING,
         city: Sequelize.STRING,
         state: Sequelize.STRING,
-        country: Sequelize.STRING,
         zip_code: Sequelize.STRING,
       },
       {

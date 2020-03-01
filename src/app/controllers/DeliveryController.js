@@ -43,7 +43,6 @@ class DeliveryController {
             'adjunct',
             'city',
             'state',
-            'country',
             'zip_code',
           ],
         },

@@ -19,10 +19,10 @@ routes.post('/login', SessionController.store);
 
 routes.use(authMiddleware);
 
-routes.get('/recipients', RecipientController.index);
-routes.post('/recipients', RecipientController.store);
-routes.put('/recipients/:recipientId', RecipientController.update);
-routes.delete('/recipients/:recipientId', RecipientController.delete);
+routes.get('/recipient', RecipientController.index);
+routes.post('/recipient', RecipientController.store);
+routes.put('/recipient/:recipientId', RecipientController.update);
+routes.delete('/recipient/:recipientId', RecipientController.delete);
 
 routes.get('/deliveryman', DeliverymanController.index);
 routes.post('/deliveryman', DeliverymanController.store);

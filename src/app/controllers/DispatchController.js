@@ -52,7 +52,6 @@ class OrderController {
             'adjunct',
             'city',
             'state',
-            'country',
             'zip_code',
           ],
         },

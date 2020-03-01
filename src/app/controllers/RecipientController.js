@@ -16,7 +16,6 @@ class RecipientController {
         'adjunct',
         'city',
         'state',
-        'country',
         'zip_code',
       ],
       limit: 30,
@@ -33,7 +32,6 @@ class RecipientController {
       number: Yup.string().required(),
       city: Yup.string().required(),
       state: Yup.string().required(),
-      country: Yup.string().required(),
       zip_code: Yup.string().required(),
     });
 
@@ -48,7 +46,6 @@ class RecipientController {
       adjunct,
       city,
       state,
-      country,
       zip_code,
     } = await Recipient.create(req.body);
 
@@ -59,7 +56,6 @@ class RecipientController {
       adjunct,
       city,
       state,
-      country,
       zip_code,
     });
   }
@@ -71,7 +67,6 @@ class RecipientController {
       number: Yup.string(),
       city: Yup.string(),
       state: Yup.string(),
-      country: Yup.string(),
       zip_code: Yup.string(),
     });
 
@@ -89,7 +84,6 @@ class RecipientController {
       adjunct,
       city,
       state,
-      country,
       zip_code,
     } = await recipient.update(req.body);
 
@@ -100,7 +94,6 @@ class RecipientController {
       adjunct,
       city,
       state,
-      country,
       zip_code,
     });
   }
