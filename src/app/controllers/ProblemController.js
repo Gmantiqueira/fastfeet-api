@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import Sequelize from 'sequelize';
 
 import Problem from '../models/Problem';
 import Delivery from '../models/Delivery';
@@ -9,11 +10,14 @@ import Recipient from '../models/Recipient';
 class ProblemController {
   async index(req, res) {
     const { deliveryId } = req.params;
+    const { Op } = Sequelize;
+    const { page = 1, q = '' } = req.query;
 
     const problems = await Problem.findAll({
-      where: { delivery_id: deliveryId, canceled_at: null },
       order: ['date'],
       attributes: ['description'],
+      limit: 30,
+      offset: (page - 1) * 30,
       include: [
         {
           model: Delivery,
@@ -60,6 +64,22 @@ class ProblemController {
           ],
         },
       ],
+      where: {
+        delivery_id: deliveryId,
+        canceled_at: null,
+        [Op.or]: [
+          {
+            id: {
+              [Op.like]: `%${q}%`,
+            },
+          },
+          {
+            description: {
+              [Op.like]: `%${q}%`,
+            },
+          },
+        ],
+      },
     });
 
     return res.json(problems);
