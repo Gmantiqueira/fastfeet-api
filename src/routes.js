@@ -39,7 +39,11 @@ routes.get(
   DispatchController.pending
 );
 
-routes.get('/delivery/:deliveryId/problems', ProblemController.index);
+routes.get('/problems', ProblemController.index);
+routes.get(
+  '/delivery/:deliveryId/problems',
+  DispatchController.deliveryProblem
+);
 routes.post('/delivery/:deliveryId/problems', ProblemController.store);
 routes.post('/problem/:deliveryId/cancel-delivery', ProblemController.cancel);
 

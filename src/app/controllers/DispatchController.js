@@ -1,7 +1,9 @@
 import { getHours } from 'date-fns';
 
 import Delivery from '../models/Delivery';
+import Deliveryman from '../models/Deliveryman';
 import File from '../models/File';
+import Problem from '../models/Problem';
 import Recipient from '../models/Recipient';
 
 class OrderController {
@@ -59,6 +61,70 @@ class OrderController {
     });
 
     return res.json(deliveries);
+  }
+
+  async deliveryProblem(req, res) {
+    const { deliveryId } = req.params;
+    const { page = 1 } = req.query;
+
+    const problems = await Problem.findAll({
+      order: ['date'],
+      attributes: ['description'],
+      limit: 30,
+      offset: (page - 1) * 30,
+      include: [
+        {
+          model: Delivery,
+          as: 'delivery',
+          attributes: [
+            'id',
+            'product',
+            'canceled_at',
+            'start_date',
+            'end_date',
+          ],
+          include: [
+            {
+              model: Deliveryman,
+              as: 'deliveryman',
+              attributes: ['id', 'name', 'email'],
+              include: [
+                {
+                  model: File,
+                  as: 'avatar',
+                  attributes: ['name', 'path', 'url'],
+                },
+              ],
+            },
+            {
+              model: File,
+              as: 'signature',
+              attributes: ['name', 'path', 'url'],
+            },
+            {
+              model: Recipient,
+              as: 'recipient',
+              attributes: [
+                'id',
+                'name',
+                'street',
+                'number',
+                'adjunct',
+                'city',
+                'state',
+                'zip_code',
+              ],
+            },
+          ],
+        },
+      ],
+      where: {
+        delivery_id: deliveryId,
+        canceled_at: null,
+      },
+    });
+
+    return res.json(problems);
   }
 
   async end(req, res) {
