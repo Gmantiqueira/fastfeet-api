@@ -8,7 +8,7 @@ import Recipient from '../models/Recipient';
 
 class DeliveryController {
   async index(req, res) {
-    const { Op } = Sequelize;
+    const { Op, where, cast, col } = Sequelize;
     const { page = 1, q = '' } = req.query;
 
     const deliveries = await Delivery.findAll({
@@ -51,11 +51,9 @@ class DeliveryController {
       ],
       where: {
         [Op.or]: [
-          {
-            id: {
-              [Op.like]: `%${q}%`,
-            },
-          },
+          where(cast(col('Delivery.id'), 'varchar'), {
+            [Op.like]: `%${q}%`,
+          }),
           {
             product: {
               [Op.like]: `%${q}%`,

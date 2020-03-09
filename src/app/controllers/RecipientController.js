@@ -5,7 +5,7 @@ import Recipient from '../models/Recipient';
 
 class RecipientController {
   async index(req, res) {
-    const { Op } = Sequelize;
+    const { Op, where, cast, col } = Sequelize;
     const { page = 1, q = '' } = req.query;
 
     const recipients = await Recipient.findAll({
@@ -24,11 +24,9 @@ class RecipientController {
       offset: (page - 1) * 30,
       where: {
         [Op.or]: [
-          {
-            id: {
-              [Op.like]: `%${q}%`,
-            },
-          },
+          where(cast(col('Recipient.id'), 'varchar'), {
+            [Op.like]: `%${q}%`,
+          }),
           {
             name: {
               [Op.like]: `%${q}%`,

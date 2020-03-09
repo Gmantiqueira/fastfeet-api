@@ -10,7 +10,7 @@ import Recipient from '../models/Recipient';
 class ProblemController {
   async index(req, res) {
     const { deliveryId } = req.params;
-    const { Op } = Sequelize;
+    const { Op, where, cast, col } = Sequelize;
     const { page = 1, q = '' } = req.query;
 
     const problems = await Problem.findAll({
@@ -68,11 +68,9 @@ class ProblemController {
         delivery_id: deliveryId,
         canceled_at: null,
         [Op.or]: [
-          {
-            id: {
-              [Op.like]: `%${q}%`,
-            },
-          },
+          where(cast(col('Problem.id'), 'varchar'), {
+            [Op.like]: `%${q}%`,
+          }),
           {
             description: {
               [Op.like]: `%${q}%`,

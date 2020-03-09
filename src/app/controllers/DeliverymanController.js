@@ -6,7 +6,7 @@ import File from '../models/File';
 
 class DeliverymanController {
   async index(req, res) {
-    const { Op } = Sequelize;
+    const { Op, where, cast, col } = Sequelize;
     const { page = 1, q = '' } = req.query;
 
     const deliverymen = await Deliveryman.findAll({
@@ -23,11 +23,9 @@ class DeliverymanController {
       ],
       where: {
         [Op.or]: [
-          {
-            id: {
-              [Op.like]: `%${q}%`,
-            },
-          },
+          where(cast(col('Deliveryman.id'), 'varchar'), {
+            [Op.like]: `%${q}%`,
+          }),
           {
             name: {
               [Op.like]: `%${q}%`,
