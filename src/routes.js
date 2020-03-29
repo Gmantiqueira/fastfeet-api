@@ -17,6 +17,7 @@ const upload = multer(multerConfig);
 
 routes.post('/delivery/:deliveryId/problems', ProblemController.store);
 routes.post('/problem/:deliveryId/cancel-delivery', ProblemController.cancel);
+routes.get('/deliveryman/:id', DeliverymanController.index);
 
 routes.put('/delivery/:deliveryId/withdraw', DispatchController.start);
 routes.put('/delivery/:deliveryId/finish', DispatchController.end);

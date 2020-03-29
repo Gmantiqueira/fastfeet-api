@@ -6,6 +6,32 @@ import File from '../models/File';
 
 class DeliverymanController {
   async index(req, res) {
+    const { id } = req.params;
+
+    if (id) {
+      const deliverymen = await Deliveryman.findOne({
+        attributes: ['id', 'name', 'email'],
+        include: [
+          {
+            model: File,
+            as: 'avatar',
+            attributes: ['name', 'path', 'url'],
+          },
+        ],
+        where: {
+          id,
+        },
+      });
+
+      if (!deliverymen) {
+        return res.status(400).json({
+          error: "Deliveryman doesn't exists. Verify your ID, please.",
+        });
+      }
+
+      return res.json(deliverymen);
+    }
+
     const { Op, where, cast, col } = Sequelize;
     const { page = 1, q = '' } = req.query;
 
