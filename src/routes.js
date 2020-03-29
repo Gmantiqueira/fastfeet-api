@@ -15,6 +15,14 @@ import DispatchController from './app/controllers/DispatchController';
 const routes = new Router();
 const upload = multer(multerConfig);
 
+routes.post('/delivery/:deliveryId/problems', ProblemController.store);
+routes.post('/problem/:deliveryId/cancel-delivery', ProblemController.cancel);
+
+routes.put('/delivery/:deliveryId/withdraw', DispatchController.start);
+routes.put('/delivery/:deliveryId/finish', DispatchController.end);
+
+routes.post('/files', upload.single('file'), FileController.store);
+
 routes.post('/login', SessionController.store);
 
 routes.use(authMiddleware);
@@ -44,12 +52,5 @@ routes.get(
   '/delivery/:deliveryId/problems',
   DispatchController.deliveryProblem
 );
-routes.post('/delivery/:deliveryId/problems', ProblemController.store);
-routes.post('/problem/:deliveryId/cancel-delivery', ProblemController.cancel);
-
-routes.put('/delivery/:deliveryId/withdraw', DispatchController.start);
-routes.put('/delivery/:deliveryId/finish', DispatchController.end);
-
-routes.post('/files', upload.single('file'), FileController.store);
 
 export default routes;

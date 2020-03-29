@@ -1,4 +1,5 @@
-import { getHours } from 'date-fns';
+import { getHours, startOfDay, endOfDay } from 'date-fns';
+import { Op } from 'sequelize';
 
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
@@ -9,14 +10,30 @@ import Recipient from '../models/Recipient';
 class OrderController {
   async start(req, res) {
     const { deliveryId } = req.params;
-
-    const delivery = await Delivery.findByPk(deliveryId);
+    const { deliverymanId } = req.body;
 
     if (getHours(new Date()) < 8 || getHours(new Date()) >= 18) {
       return res
         .status(400)
         .json({ error: 'The withdrawal date must be between 8am and 6pm' });
     }
+
+    const deliveries = await Delivery.findAll({
+      where: {
+        deliveryman_id: deliverymanId,
+        start_date: {
+          [Op.between]: [startOfDay(new Date()), endOfDay(new Date())],
+        },
+      },
+    });
+
+    if (deliveries.length >= 5) {
+      return res
+        .status(400)
+        .json({ error: 'You can do only 5 withdrawal per day.' });
+    }
+
+    const delivery = await Delivery.findByPk(deliveryId);
 
     await delivery.update({ start_date: new Date() });
 
