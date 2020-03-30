@@ -19,6 +19,10 @@ routes.post('/delivery/:deliveryId/problems', ProblemController.store);
 routes.post('/problem/:deliveryId/cancel-delivery', ProblemController.cancel);
 routes.get('/deliveryman/:id', DeliverymanController.index);
 
+routes.get(
+  '/deliveryman/:deliverymanId/deliveries',
+  DispatchController.pending
+);
 routes.put('/delivery/:deliveryId/withdraw', DispatchController.start);
 routes.put('/delivery/:deliveryId/finish', DispatchController.end);
 
@@ -42,11 +46,6 @@ routes.get('/delivery', DeliveryController.index);
 routes.post('/delivery', DeliveryController.store);
 routes.put('/delivery/:deliveryId', DeliveryController.update);
 routes.delete('/delivery/:deliveryId', DeliveryController.delete);
-
-routes.get(
-  '/deliveryman/:deliverymanId/deliveries',
-  DispatchController.pending
-);
 
 routes.get('/problems', ProblemController.index);
 routes.get(
