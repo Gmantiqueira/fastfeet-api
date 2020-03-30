@@ -10,7 +10,7 @@ class DeliverymanController {
 
     if (id) {
       const deliverymen = await Deliveryman.findOne({
-        attributes: ['id', 'name', 'email'],
+        attributes: ['id', 'name', 'email', 'created_at'],
         include: [
           {
             model: File,
@@ -24,7 +24,7 @@ class DeliverymanController {
       });
 
       if (!deliverymen) {
-        return res.status(400).json({
+        return res.json({
           error: "Deliveryman doesn't exists. Verify your ID, please.",
         });
       }
