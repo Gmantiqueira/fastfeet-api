@@ -2,6 +2,10 @@ import * as Yup from 'yup';
 
 import Problem from '../models/Problem';
 import Delivery from '../models/Delivery';
+import Recipient from '../models/Recipient';
+
+import CancellationMail from '../jobs/CancellationMail';
+import Queue from '../../lib/Queue';
 
 class ProblemController {
   async index(req, res) {
@@ -44,21 +48,45 @@ class ProblemController {
   async cancel(req, res) {
     const { problemId } = req.params;
 
-    const problemExists = await Problem.findOne({
+    const problem = await Problem.findOne({
       where: { id: problemId },
     });
 
-    if (!problemExists) {
+    if (!problem) {
       return res
         .status(400)
-        .json({ error: 'There is no problem with this delivery' });
+        .json({ error: 'Não há problemas com essa entrega!' });
     }
 
-    const delivery = await Delivery.findByPk(problemExists.delivery_id);
+    const delivery = await Delivery.findOne({
+      attributes: ['product'],
+      where: { id: problem.delivery_id },
+      include: [
+        {
+          model: Deliveryman,
+          as: 'deliveryman',
+          attributes: ['name'],
+        },
+        {
+          model: Recipient,
+          as: 'recipient',
+          attributes: ['name'],
+        },
+      ],
+    });
 
-    // Enviar email para entregador
+    const emailData = {
+      deliveryman: delivery.deliveryman,
+      product: delivery.product,
+      client: delivery.recipient.name,
+      problem: problem.description,
+    };
 
     await delivery.update({ canceled_at: new Date() });
+
+    Queue.add(CancellationMail.key, {
+      emailData,
+    });
 
     return res.json(delivery);
   }

@@ -6,6 +6,9 @@ import Deliveryman from '../models/Deliveryman';
 import File from '../models/File';
 import Recipient from '../models/Recipient';
 
+import RegisterMail from '../jobs/RegisterMail';
+import Queue from '../../lib/Queue';
+
 class DeliveryController {
   async index(req, res) {
     const { Op, where, cast, col } = Sequelize;
@@ -100,6 +103,41 @@ class DeliveryController {
     const { product, deliveryman_id, recipient_id } = await Delivery.create(
       req.body
     );
+
+    const delivery = await Delivery.findOne({
+      attributes: ['product'],
+      include: [
+        {
+          model: Deliveryman,
+          as: 'deliveryman',
+          attributes: ['name'],
+        },
+        {
+          model: Recipient,
+          as: 'recipient',
+          attributes: [
+            'name',
+            'street',
+            'number',
+            'adjunct',
+            'city',
+            'state',
+            'zip_code',
+          ],
+        },
+      ],
+    });
+
+    const emailData = {
+      deliveryman: delivery.deliveryman,
+      client: delivery.recipient.name,
+      address: delivery.recipient,
+      product: delivery.product,
+    };
+
+    Queue.add(RegisterMail.key, {
+      emailData,
+    });
 
     return res.json({
       product,
