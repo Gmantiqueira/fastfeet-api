@@ -85,59 +85,11 @@ class OrderController {
     const { page = 1 } = req.query;
 
     const problems = await Problem.findAll({
-      order: ['date'],
-      attributes: ['description'],
+      attributes: ['created_at', 'description'],
       limit: 30,
       offset: (page - 1) * 30,
-      include: [
-        {
-          model: Delivery,
-          as: 'delivery',
-          attributes: [
-            'id',
-            'product',
-            'canceled_at',
-            'start_date',
-            'end_date',
-          ],
-          include: [
-            {
-              model: Deliveryman,
-              as: 'deliveryman',
-              attributes: ['id', 'name', 'email'],
-              include: [
-                {
-                  model: File,
-                  as: 'avatar',
-                  attributes: ['name', 'path', 'url'],
-                },
-              ],
-            },
-            {
-              model: File,
-              as: 'signature',
-              attributes: ['name', 'path', 'url'],
-            },
-            {
-              model: Recipient,
-              as: 'recipient',
-              attributes: [
-                'id',
-                'name',
-                'street',
-                'number',
-                'adjunct',
-                'city',
-                'state',
-                'zip_code',
-              ],
-            },
-          ],
-        },
-      ],
       where: {
         delivery_id: deliveryId,
-        canceled_at: null,
       },
     });
 
@@ -146,12 +98,12 @@ class OrderController {
 
   async end(req, res) {
     const { deliveryId } = req.params;
-    const { signature_id } = req.body;
+    const { signatureId } = req.body;
 
     const delivery = await Delivery.findByPk(deliveryId);
 
     await delivery.update({
-      signature_id,
+      signature_id: signatureId,
       end_date: new Date(),
     });
 

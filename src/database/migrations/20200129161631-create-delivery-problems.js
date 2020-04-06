@@ -1,6 +1,12 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('problems', {
+      id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       delivery_id: {
         type: Sequelize.INTEGER,
         references: { model: 'deliveries', key: 'id' },

@@ -42,10 +42,10 @@ class ProblemController {
   }
 
   async cancel(req, res) {
-    const { deliveryId } = req.params;
+    const { problemId } = req.params;
 
     const problemExists = await Problem.findOne({
-      where: { delivery_id: deliveryId },
+      where: { id: problemId },
     });
 
     if (!problemExists) {
@@ -54,7 +54,9 @@ class ProblemController {
         .json({ error: 'There is no problem with this delivery' });
     }
 
-    const delivery = await Delivery.findByPk(deliveryId);
+    const delivery = await Delivery.findByPk(problemExists.delivery_id);
+
+    // Enviar email para entregador
 
     await delivery.update({ canceled_at: new Date() });
 
