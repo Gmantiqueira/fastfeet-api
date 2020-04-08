@@ -49,6 +49,6 @@ routes.put('/delivery/:deliveryId', DeliveryController.update);
 routes.delete('/delivery/:deliveryId', DeliveryController.delete);
 
 routes.get('/problems', ProblemController.index);
-routes.put('/problem/:problemId/cancel-delivery', ProblemController.cancel);
+routes.delete('/problem/:problemId/cancel-delivery', ProblemController.cancel);
 
 export default routes;

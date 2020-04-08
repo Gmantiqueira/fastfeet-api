@@ -13,9 +13,9 @@ class OrderController {
     const { deliverymanId } = req.body;
 
     if (getHours(new Date()) < 8 || getHours(new Date()) >= 18) {
-      return res
-        .status(400)
-        .json({ error: 'The withdrawal date must be between 8am and 6pm' });
+      return res.json({
+        error: 'The withdrawal date must be between 8am and 6pm',
+      });
     }
 
     const deliveries = await Delivery.findAll({

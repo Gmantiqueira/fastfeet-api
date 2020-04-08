@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 
 import Problem from '../models/Problem';
+import Deliveryman from '../models/Deliveryman';
 import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
 
@@ -13,7 +14,7 @@ class ProblemController {
 
     const problems = await Problem.findAll({
       order: ['delivery_id'],
-      attributes: ['delivery_id', 'description'],
+      attributes: ['id', 'delivery_id', 'description'],
       limit: 30,
       offset: (page - 1) * 30,
     });
@@ -48,9 +49,7 @@ class ProblemController {
   async cancel(req, res) {
     const { problemId } = req.params;
 
-    const problem = await Problem.findOne({
-      where: { id: problemId },
-    });
+    const problem = await Problem.findByPk(problemId);
 
     if (!problem) {
       return res
@@ -59,13 +58,13 @@ class ProblemController {
     }
 
     const delivery = await Delivery.findOne({
-      attributes: ['product'],
+      attributes: ['product', 'canceled_at'],
       where: { id: problem.delivery_id },
       include: [
         {
           model: Deliveryman,
           as: 'deliveryman',
-          attributes: ['name'],
+          attributes: ['name', 'email'],
         },
         {
           model: Recipient,
@@ -82,7 +81,10 @@ class ProblemController {
       problem: problem.description,
     };
 
-    await delivery.update({ canceled_at: new Date() });
+    await Delivery.update(
+      { canceled_at: new Date() },
+      { returning: true, where: { id: problem.delivery_id } }
+    );
 
     Queue.add(CancellationMail.key, {
       emailData,

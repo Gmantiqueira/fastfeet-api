@@ -54,12 +54,12 @@ class DeliverymanController {
           }),
           {
             name: {
-              [Op.like]: `%${q}%`,
+              [Op.iLike]: `%${q}%`,
             },
           },
           {
             email: {
-              [Op.like]: `%${q}%`,
+              [Op.iLike]: `%${q}%`,
             },
           },
         ],

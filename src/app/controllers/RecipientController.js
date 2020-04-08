@@ -29,22 +29,22 @@ class RecipientController {
           }),
           {
             name: {
-              [Op.like]: `%${q}%`,
+              [Op.iLike]: `%${q}%`,
             },
           },
           {
             street: {
-              [Op.like]: `%${q}%`,
+              [Op.iLike]: `%${q}%`,
             },
           },
           {
             number: {
-              [Op.like]: `%${q}%`,
+              [Op.iLike]: `%${q}%`,
             },
           },
           {
             city: {
-              [Op.like]: `%${q}%`,
+              [Op.iLike]: `%${q}%`,
             },
           },
           {

@@ -59,27 +59,27 @@ class DeliveryController {
           }),
           {
             product: {
-              [Op.like]: `%${q}%`,
+              [Op.iLike]: `%${q}%`,
             },
           },
           {
             '$deliveryman.name$': {
-              [Op.like]: `%${q}%`,
+              [Op.iLike]: `%${q}%`,
             },
           },
           {
             '$recipient.name$': {
-              [Op.like]: `%${q}%`,
+              [Op.iLike]: `%${q}%`,
             },
           },
           {
             '$recipient.city$': {
-              [Op.like]: `%${q}%`,
+              [Op.iLike]: `%${q}%`,
             },
           },
           {
             '$recipient.state$': {
-              [Op.like]: `%${q}%`,
+              [Op.iLike]: `%${q}%`,
             },
           },
         ],
@@ -106,11 +106,12 @@ class DeliveryController {
 
     const delivery = await Delivery.findOne({
       attributes: ['product'],
+      where: { deliveryman_id },
       include: [
         {
           model: Deliveryman,
           as: 'deliveryman',
-          attributes: ['name'],
+          attributes: ['name', 'email'],
         },
         {
           model: Recipient,
@@ -131,7 +132,7 @@ class DeliveryController {
     const emailData = {
       deliveryman: delivery.deliveryman,
       client: delivery.recipient.name,
-      address: delivery.recipient,
+      recipient: delivery.recipient,
       product: delivery.product,
     };
 
