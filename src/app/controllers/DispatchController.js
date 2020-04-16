@@ -7,14 +7,14 @@ import File from '../models/File';
 import Problem from '../models/Problem';
 import Recipient from '../models/Recipient';
 
-class OrderController {
+class DispatchController {
   async start(req, res) {
     const { deliveryId } = req.params;
     const { deliverymanId } = req.body;
 
     if (getHours(new Date()) < 8 || getHours(new Date()) >= 18) {
       return res.json({
-        error: 'The withdrawal date must be between 8am and 6pm',
+        error: 'A retirada só pode ocorrer das 8:00 às 18:00.',
       });
     }
 
@@ -28,9 +28,7 @@ class OrderController {
     });
 
     if (deliveries.length >= 5) {
-      return res
-        .status(400)
-        .json({ error: 'You can do only 5 withdrawal per day.' });
+      return res.json({ error: 'Você só pode efetuar 5 retiradas por dia.' });
     }
 
     const delivery = await Delivery.findByPk(deliveryId);
@@ -43,12 +41,17 @@ class OrderController {
   async pending(req, res) {
     const { deliverymanId } = req.params;
 
-    const { page = 1 } = req.query;
+    const { page = 1, finished = false } = req.query;
 
     const deliveries = await Delivery.findAll({
       where: {
         deliveryman_id: deliverymanId,
         canceled_at: null,
+        end_date: finished
+          ? {
+              [Op.ne]: null,
+            }
+          : null,
       },
       attributes: ['id', 'product', 'canceled_at', 'start_date', 'end_date'],
       limit: 30,
@@ -111,4 +114,4 @@ class OrderController {
   }
 }
 
-export default new OrderController();
+export default new DispatchController();

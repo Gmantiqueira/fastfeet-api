@@ -14,9 +14,20 @@ class ProblemController {
 
     const problems = await Problem.findAll({
       order: ['delivery_id'],
+      where: {
+        '$delivery.canceled_at$': null,
+        '$delivery.end_date$': null,
+      },
       attributes: ['id', 'delivery_id', 'description'],
       limit: 30,
       offset: (page - 1) * 30,
+      include: [
+        {
+          model: Delivery,
+          as: 'delivery',
+          attributes: ['end_date', 'canceled_at'],
+        },
+      ],
     });
 
     return res.json(problems);
