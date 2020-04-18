@@ -38,8 +38,8 @@ class DeliverymanController {
     const deliverymen = await Deliveryman.findAll({
       order: ['id'],
       attributes: ['id', 'name', 'email'],
-      limit: 30,
-      offset: (page - 1) * 30,
+      limit: 10,
+      offset: (page - 1) * 10,
       include: [
         {
           model: File,

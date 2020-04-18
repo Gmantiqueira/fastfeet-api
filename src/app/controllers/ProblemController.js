@@ -19,8 +19,8 @@ class ProblemController {
         '$delivery.end_date$': null,
       },
       attributes: ['id', 'delivery_id', 'description'],
-      limit: 30,
-      offset: (page - 1) * 30,
+      limit: 10,
+      offset: (page - 1) * 10,
       include: [
         {
           model: Delivery,

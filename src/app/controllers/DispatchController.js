@@ -54,8 +54,8 @@ class DispatchController {
           : null,
       },
       attributes: ['id', 'product', 'canceled_at', 'start_date', 'end_date'],
-      limit: 30,
-      offset: (page - 1) * 30,
+      limit: 10,
+      offset: (page - 1) * 10,
       order: ['created_at'],
       include: [
         {

@@ -20,8 +20,8 @@ class RecipientController {
         'state',
         'zip_code',
       ],
-      limit: 30,
-      offset: (page - 1) * 30,
+      limit: 10,
+      offset: (page - 1) * 10,
       where: {
         [Op.or]: [
           where(cast(col('Recipient.id'), 'varchar'), {

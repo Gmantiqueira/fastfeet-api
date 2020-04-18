@@ -17,8 +17,8 @@ class DeliveryController {
     const deliveries = await Delivery.findAll({
       order: ['id'],
       attributes: ['id', 'product', 'canceled_at', 'start_date', 'end_date'],
-      limit: 30,
-      offset: (page - 1) * 30,
+      limit: 10,
+      offset: (page - 1) * 10,
       include: [
         {
           model: Deliveryman,
