@@ -134,9 +134,12 @@ class RecipientController {
 
   async delete(req, res) {
     const { recipientId } = req.params;
-    const recipient = await Recipient.findByPk(recipientId);
 
-    const data = await recipient.delete(req.body);
+    const data = await Recipient.destroy({
+      where: {
+        id: recipientId,
+      },
+    });
 
     return res.json(data);
   }

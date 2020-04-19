@@ -118,9 +118,9 @@ class DeliverymanController {
   async delete(req, res) {
     const { deliverymanId } = req.params;
 
-    const data = await Deliveryman.delete({
+    const data = await Deliveryman.destroy({
       where: {
-        deliveryman_id: deliverymanId,
+        id: deliverymanId,
       },
     });
 

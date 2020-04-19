@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import Sequelize from 'sequelize';
+import { Op, where, cast, col } from 'sequelize';
 
 import Delivery from '../models/Delivery';
 import Deliveryman from '../models/Deliveryman';
@@ -11,7 +11,6 @@ import Queue from '../../lib/Queue';
 
 class DeliveryController {
   async index(req, res) {
-    const { Op, where, cast, col } = Sequelize;
     const { page = 1, q = '' } = req.query;
 
     const deliveries = await Delivery.findAll({
